@@ -1,1 +1,37 @@
-TESTT
+name: Deploy-e-commerce-app
+on:
+  push:
+    branches: 
+      - main
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Source
+              uses: actions/checkout@v4
+            
+            - name: Install Node.js
+              uses: actions/setup-node@v2
+              with:
+                node-version: '14'
+
+            - name: Install Depedencies
+              run : npm install
+            
+            - name: Build Client-app
+              run : npm run build
+
+    deploy: 
+        needs: build
+        runs-on: self-hosted
+        steps:
+            - name: Pull image from Docker hub 
+              run: docker pull bayrambayraktar/......:latest
+
+            - name: Delete old container
+              run: docker rm -f ....-container || true
+              
+            - name: Run Docker Container
+              run: docker run -d -p 80:80 --name ...container bayrambayraktar/....:latest
+
